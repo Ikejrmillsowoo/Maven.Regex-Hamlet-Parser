@@ -10,16 +10,19 @@ import java.util.regex.Pattern;
 public class HamletParser {
 
     private String hamletData;
-   // private String hamletDataReformed;
+
+    ClassLoader classLoader = getClass().getClassLoader();
+    File file = new File(classLoader.getResource("hamlet.txt").getFile());
+
 
     public HamletParser() {
-        this.hamletData = loadFile();
+        this.hamletData = loadFile(file);
     }
 
 
-    private String loadFile() {
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("hamlet.txt").getFile());
+    private String loadFile(File file) {
+//        ClassLoader classLoader = getClass().getClassLoader();
+//        File file = new File(classLoader.getResource("hamlet.txt").getFile());
         StringBuilder result = new StringBuilder();
 
         try (Scanner scanner = new Scanner(file)) {
@@ -34,7 +37,6 @@ public class HamletParser {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return result.toString();
     }
 
@@ -44,7 +46,6 @@ public class HamletParser {
         if (!file.exists()) {
             file.createNewFile();
         }
-
         try {
             FileWriter fileWriter = new FileWriter(file);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
@@ -57,7 +58,8 @@ public class HamletParser {
 
     }
 
-    public String getHamletData() {
+    public String getHamletData() throws IOException {
+        writeFileToTxt();
         return hamletData;
     }
 
@@ -74,9 +76,21 @@ public class HamletParser {
         }
         return string;
     }
-//
-//    public String changeHoratioToTariq(String string) {
-//        Matcher matcher = patternHoratio.matcher(string);
-//        return matcher.replaceAll("Tariq");
-//    }
+
+    public boolean findGivenName(String string) {
+        int count = 0;
+        try (Scanner scanner = new Scanner(file)) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                System.out.println(line);
+               if  (line.contains(string)){
+                   count++;
+               };
+            }
+            scanner.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+       return count>0;
+    }
 }

@@ -1,15 +1,18 @@
+import javafx.beans.binding.When;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import java.io.IOException;
+
+
 
 public class HamletParserTest {
     private String hamletText;
     private HamletParser hamletParser;
 
     @Before
-    public void setUp() {
+    public void setUp() throws IOException {
         this.hamletParser = new HamletParser();
         this.hamletText = hamletParser.getHamletData();
     }
@@ -78,13 +81,41 @@ public class HamletParserTest {
         String expectedString = "If you do meet Tariq and Marcellus,";
         //Then
         Assert.assertEquals(expectedString, actualString);
+       // I think I hear them. Stand, ho! Who's there?
     }
 
-//    @Test
-//    public void testFindHoratio() {
-//    }
-//
-//    @Test
-//    public void testFindHamlet() {
-//    }
+    @Test
+    public void testFindHoratio_expectTrue() {
+        //given
+        String string = "Horatio";
+
+        //When
+        Assert.assertTrue(hamletParser.findGivenName(string));
+    }
+
+    @Test
+    public void testFindLeon_expectFalse() {
+        //given
+        String string = "Leon";
+
+        //When
+        Assert.assertFalse(hamletParser.findGivenName(string));
+    }
+
+    @Test
+    public void testFindHamlet_expectTrue() {
+        //given
+        String string = "Hamlet";
+
+
+        Assert.assertTrue(hamletParser.findGivenName(string));
+    }
+
+    @Test
+    public void testFindTariq_expectFalse() {
+        //given
+        String string = "Tariq";
+
+        Assert.assertFalse(hamletParser.findGivenName(string));
+    }
 }
