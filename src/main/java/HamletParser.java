@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -11,8 +12,8 @@ public class HamletParser {
 
     private String hamletData;
     //private String dataFile = "hamlet.txt";
-    Pattern pattern = Pattern.compile("\\bHamlet\\b");
-    Pattern pattern2 = Pattern.compile("\\bHoratio\\b");
+    Pattern patternHamlet = Pattern.compile("\\bHamlet\\b");
+    Pattern patternHoratio = Pattern.compile("\\bHoratio\\b");
 
 
 
@@ -29,10 +30,8 @@ public class HamletParser {
         try(Scanner scanner = new Scanner(file)){
             while(scanner.hasNextLine()){
                 String line = scanner.nextLine();
-                    Matcher matcher = pattern.matcher(line);
-                   line = matcher.replaceAll("Leon");
+                   line = changeHamletToLeon(line);
 
-               // System.out.println("here: " +line);
                 result.append(line).append("\n");
             }
 
@@ -44,12 +43,27 @@ public class HamletParser {
         return result.toString();
     }
 
+    private void writeFileToTxt(String string){
+
+    }
+
     public String getHamletData(){
         return hamletData;
     }
+
+
     public void setDataFile(String string){
         //this.dataFile = string;
         loadFile();
     }
 
+    public String changeHamletToLeon(String string) {
+        Matcher matcher = patternHamlet.matcher(string);
+        return matcher.replaceAll("Leon");
+    }
+
+    public String changeHoratioToTariq(String string) {
+        Matcher matcher = patternHoratio.matcher(string);
+        return matcher.replaceAll("Tariq");
+    }
 }

@@ -15,20 +15,36 @@ public class HamletParserTest {
     }
 
     @Test
-    public void testChangeHamletToLeon() {
+    public void testChangeHamletToLeon_expectTrue() {
         //given
-        hamletText = "Hamlet";
-        hamletParser.setDataFile(hamletText);
-
-        //when
-       // HamletParser ham = new HamletParser();
-       // System.out.println(hamletParser.getHamletData());
-
-        Assert.assertEquals("Leon", hamletParser.getHamletData());
+        String string = "Hamlet";
+        //When
+        String actualName = hamletParser.changeHamletToLeon(string);
+        String expectedName = "Leon";
+        //Then
+        Assert.assertEquals(expectedName, actualName);
     }
 
     @Test
-    public void testChangeHoratioToTariq() {
+    public void testChangeHamletToLeon_expectFalse() {
+        //given
+        String string = "Camlet";
+        //When
+        String actualName = hamletParser.changeHamletToLeon(string);
+        String expectedName = "Leon";
+        //Then
+        Assert.assertNotEquals(expectedName, actualName);
+    }
+
+    @Test
+    public void testChangeHoratioToTariq_expectTru() {
+        //given
+        String string = "Horatio";
+        //When
+        String actualName = hamletParser.changeHoratioToTariq(string);
+        String expectedName = "Leon";
+        //Then
+        Assert.assertEquals(expectedName, actualName);
     }
 
     @Test
