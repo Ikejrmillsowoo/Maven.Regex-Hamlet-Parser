@@ -19,7 +19,7 @@ public class HamletParserTest {
         //given
         String string = "Hamlet";
         //When
-        String actualName = hamletParser.changeHamletToLeon(string);
+        String actualName = hamletParser.findAndChangeNames(string);
         String expectedName = "Leon";
         //Then
         Assert.assertEquals(expectedName, actualName);
@@ -30,28 +30,61 @@ public class HamletParserTest {
         //given
         String string = "Camlet";
         //When
-        String actualName = hamletParser.changeHamletToLeon(string);
+        String actualName = hamletParser.findAndChangeNames(string);
         String expectedName = "Leon";
         //Then
         Assert.assertNotEquals(expectedName, actualName);
     }
 
     @Test
-    public void testChangeHoratioToTariq_expectTru() {
+    public void testChangeHamletToLeonInString_expectTrue() {
+        //given
+        String string = "The Tragedy of Hamlet, Prince of Denmark";
+        //When
+        String actualString = hamletParser.findAndChangeNames(string);
+        String expectedString = "The Tragedy of Leon, Prince of Denmark";
+        //Then
+        Assert.assertEquals(expectedString, actualString);
+    }
+
+    @Test
+    public void testChangeHoratioToTariq_expectTrue() {
         //given
         String string = "Horatio";
         //When
-        String actualName = hamletParser.changeHoratioToTariq(string);
-        String expectedName = "Leon";
+        String actualName = hamletParser.findAndChangeNames(string);
+        String expectedName = "Tariq";
         //Then
         Assert.assertEquals(expectedName, actualName);
     }
 
     @Test
-    public void testFindHoratio() {
+    public void testChangeHoratioToTariq_expectFalse() {
+        //given
+        String string = "Horatia";
+        //When
+        String actualName = hamletParser.findAndChangeNames(string);
+        String expectedName = "Tariq";
+        //Then
+        Assert.assertNotEquals(expectedName, actualName);
     }
 
     @Test
-    public void testFindHamlet() {
+    public void testChangeHoratioToTariqInString_expectTrue() {
+        //given
+        String string = "If you do meet Horatio and Marcellus,";
+        //When
+        String actualString = hamletParser.findAndChangeNames(string);
+        String expectedString = "If you do meet Tariq and Marcellus,";
+        //Then
+        Assert.assertEquals(expectedString, actualString);
     }
+
+//    @Test
+//    public void testFindHoratio() {
+//    }
+//
+//    @Test
+//    public void testFindHamlet() {
+//    }
 }

@@ -1,5 +1,4 @@
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
@@ -11,59 +10,73 @@ import java.util.regex.Pattern;
 public class HamletParser {
 
     private String hamletData;
-    //private String dataFile = "hamlet.txt";
-    Pattern patternHamlet = Pattern.compile("\\bHamlet\\b");
-    Pattern patternHoratio = Pattern.compile("\\bHoratio\\b");
+   // private String hamletDataReformed;
 
-
-
-    public HamletParser(){
+    public HamletParser() {
         this.hamletData = loadFile();
     }
 
 
-    private String loadFile(){
+    private String loadFile() {
         ClassLoader classLoader = getClass().getClassLoader();
         File file = new File(classLoader.getResource("hamlet.txt").getFile());
         StringBuilder result = new StringBuilder();
 
-        try(Scanner scanner = new Scanner(file)){
-            while(scanner.hasNextLine()){
+        try (Scanner scanner = new Scanner(file)) {
+            while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
-                   line = changeHamletToLeon(line);
+                line = findAndChangeNames(line);
 
                 result.append(line).append("\n");
             }
 
             scanner.close();
-        }catch(IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
         return result.toString();
     }
 
-    private void writeFileToTxt(String string){
+    private void writeFileToTxt() throws IOException {
+        File file = new File("src/main/resources/results.txt");
+
+        if (!file.exists()) {
+            file.createNewFile();
+        }
+
+        try {
+            FileWriter fileWriter = new FileWriter(file);
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            bufferedWriter.write(this.hamletData);
+            bufferedWriter.newLine();
+            bufferedWriter.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
-    public String getHamletData(){
+    public String getHamletData() {
         return hamletData;
     }
 
 
-    public void setDataFile(String string){
-        //this.dataFile = string;
-        loadFile();
+    public String findAndChangeNames(String string) {
+        if (string.contains("Hamlet")) {
+            Pattern pattern = Pattern.compile("\\bHamlet\\b");
+            Matcher matcher = pattern.matcher(string);
+            return matcher.replaceAll("Leon");
+        } else if (string.contains("Horatio")) {
+            Pattern pattern = Pattern.compile("\\Horatio\\b");
+            Matcher matcher = pattern.matcher(string);
+            return matcher.replaceAll("Tariq");
+        }
+        return string;
     }
-
-    public String changeHamletToLeon(String string) {
-        Matcher matcher = patternHamlet.matcher(string);
-        return matcher.replaceAll("Leon");
-    }
-
-    public String changeHoratioToTariq(String string) {
-        Matcher matcher = patternHoratio.matcher(string);
-        return matcher.replaceAll("Tariq");
-    }
+//
+//    public String changeHoratioToTariq(String string) {
+//        Matcher matcher = patternHoratio.matcher(string);
+//        return matcher.replaceAll("Tariq");
+//    }
 }
