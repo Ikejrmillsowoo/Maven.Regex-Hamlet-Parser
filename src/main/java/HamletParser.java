@@ -21,15 +21,12 @@ public class HamletParser {
 
 
     private String loadFile(File file) {
-//        ClassLoader classLoader = getClass().getClassLoader();
-//        File file = new File(classLoader.getResource("hamlet.txt").getFile());
         StringBuilder result = new StringBuilder();
 
         try (Scanner scanner = new Scanner(file)) {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 line = findAndChangeNames(line);
-
                 result.append(line).append("\n");
             }
 
@@ -66,11 +63,11 @@ public class HamletParser {
 
     public String findAndChangeNames(String string) {
         if (string.contains("Hamlet")) {
-            Pattern pattern = Pattern.compile("\\bHamlet\\b");
+            Pattern pattern = Pattern.compile("\\b"+ "Hamlet"+"\\b", Pattern.CASE_INSENSITIVE);
             Matcher matcher = pattern.matcher(string);
             return matcher.replaceAll("Leon");
         } else if (string.contains("Horatio")) {
-            Pattern pattern = Pattern.compile("\\Horatio\\b");
+            Pattern pattern = Pattern.compile("\\b"+"Horatio"+"\\b", Pattern.CASE_INSENSITIVE);
             Matcher matcher = pattern.matcher(string);
             return matcher.replaceAll("Tariq");
         }
@@ -78,19 +75,18 @@ public class HamletParser {
     }
 
     public boolean findGivenName(String string) {
-        int count = 0;
-        try (Scanner scanner = new Scanner(file)) {
+        Pattern pattern = Pattern.compile("\\b"+string+"\\b", Pattern.CASE_INSENSITIVE);
+        try (Scanner scanner = new Scanner(this.hamletData)) {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
-                System.out.println(line);
-               if  (line.contains(string)){
-                   count++;
-               };
+                Matcher matcher = pattern.matcher(line);
+                if (matcher.find()){
+                    return true;
+                }
             }
             scanner.close();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-       return count>0;
+
+        return false;
     }
 }
